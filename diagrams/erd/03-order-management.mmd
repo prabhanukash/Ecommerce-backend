@@ -1,0 +1,35 @@
+erDiagram
+    WebOrder ||--|{ WebOrderQuantities : contains
+    WebOrder ||--|| Address : ships_to
+    WebOrder ||--|| LocalUser : placed_by
+    WebOrderQuantities ||--|| Product : references
+
+    WebOrder {
+        Long id PK
+        UUID user_id FK
+        UUID address_id FK
+        datetime createdAt
+    }
+
+    WebOrderQuantities {
+        Long id PK
+        Long order_id FK
+        UUID product_id FK
+        Integer quantity
+    }
+
+    %% External entities shown for relationship context
+    LocalUser {
+        UUID id PK
+    }
+
+    Address {
+        UUID id PK
+    }
+
+    Product {
+        UUID id PK
+    }
+
+    note "WebOrderQuantities links orders to products with quantities"
+    note "Each order must have a shipping address and a user"
