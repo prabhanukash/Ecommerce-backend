@@ -1,0 +1,66 @@
+erDiagram
+    LocalUser ||--o{ Address : has
+    LocalUser ||--o{ VerificationToken : has
+    LocalUser ||--o{ RefreshToken : has
+    LocalUser ||--o{ EmailVerificationToken : has
+    LocalUser ||--o{ PasswordResetToken : has
+    LocalUser }o--o{ Role : has
+    Role }|--|| ERole : is_type
+
+    LocalUser {
+        UUID id PK
+        string username UK
+        string password
+        string email UK
+        string firstName
+        string lastName
+        boolean enabled
+        boolean accountNonExpired
+        boolean credentialsNonExpired
+        boolean accountNonLocked
+        boolean emailVerified
+    }
+
+    Role {
+        Integer id PK
+        ERole name UK "ROLE_USER, ROLE_ADMIN, etc"
+    }
+
+    Address {
+        UUID id PK
+        UUID user_id FK
+        string addressLine1
+        string addressLine2
+        string city
+        string state
+        string country
+        string postalCode
+    }
+
+    VerificationToken {
+        Long id PK
+        UUID user_id FK
+        string token UK
+        datetime createdTimestamp
+    }
+
+    EmailVerificationToken {
+        Long id PK
+        UUID user_id FK
+        string token UK
+        datetime expiryDate
+    }
+
+    PasswordResetToken {
+        UUID id PK
+        UUID user_id FK
+        string token UK
+        datetime expiryDate
+    }
+
+    RefreshToken {
+        UUID id PK
+        UUID user_id FK
+        string token UK
+        datetime expiryDate
+    }

@@ -1,0 +1,46 @@
+erDiagram
+    Product ||--o{ ProductVariant : has
+    Product ||--|| Inventory : has
+    Product ||--o{ WebOrderQuantities : included_in
+    
+    Product {
+        UUID id PK
+        string name "indexed"
+        string shortDescription
+        string longDescription
+        decimal price "precision(12,2)"
+        string category
+        string brand
+        string imageUrl
+        ProductStatus status "DRAFT|ACTIVE|INACTIVE|DELETED"
+        datetime createdAt
+        datetime updatedAt
+        datetime deletedAt
+    }
+
+    ProductVariant {
+        UUID id PK
+        UUID product_id FK
+        string sku UK
+        decimal price "precision(12,2)"
+        int quantity
+        string color
+        string size
+        string imageUrl
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Inventory {
+        UUID id PK
+        UUID product_id FK "unique"
+        int quantity
+        int reservedQuantity
+        int threshold
+        datetime lastUpdated
+        InventoryStatus status "IN_STOCK|LOW_STOCK|OUT_OF_STOCK"
+    }
+
+    note "Product has unique index on name"
+    note "ProductVariant has unique constraint on (product_id, color, size)"
+    note "ProductVariant has unique index on SKU"

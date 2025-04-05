@@ -1,0 +1,87 @@
+erDiagram
+    %% User and Authentication
+    LocalUser ||--o{ Address : has
+    LocalUser ||--o{ VerificationToken : has
+    LocalUser ||--o{ RefreshToken : has
+    LocalUser ||--o{ EmailVerificationToken : has
+    LocalUser ||--o{ PasswordResetToken : has
+    LocalUser }o--o{ Role : has
+    Role }|--|| ERole : is_type
+
+    %% Product and Inventory
+    Product ||--o{ ProductVariant : has
+    Product ||--|| Inventory : has
+    Product ||--o{ WebOrderQuantities : appears_in
+
+    %% Order Management
+    WebOrder ||--|{ WebOrderQuantities : contains
+    WebOrder ||--|| Address : ships_to
+    WebOrder ||--|| LocalUser : placed_by
+    WebOrderQuantities ||--|| Product : references
+
+    %% Core Entities with Key Attributes
+    LocalUser {
+        UUID id PK
+        string username UK
+        string email UK
+        string firstName
+        string lastName
+        boolean enabled
+        boolean emailVerified
+    }
+
+    Product {
+        UUID id PK
+        string name "indexed"
+        string shortDescription
+        decimal price
+        ProductStatus status
+        datetime createdAt
+    }
+
+    WebOrder {
+        Long id PK
+        UUID user_id FK
+        UUID address_id FK
+        datetime createdAt
+    }
+
+    %% Supporting Entities
+    Address {
+        UUID id PK
+        UUID user_id FK
+        string addressLine1
+        string city
+        string country
+    }
+
+    Inventory {
+        UUID id PK
+        UUID product_id FK
+        int quantity
+        InventoryStatus status
+    }
+
+    ProductVariant {
+        UUID id PK
+        UUID product_id FK
+        string sku UK
+        decimal price
+        int quantity
+    }
+
+    WebOrderQuantities {
+        Long id PK
+        Long order_id FK
+        UUID product_id FK
+        Integer quantity
+    }
+
+    Role {
+        Integer id PK
+        ERole name UK
+    }
+
+    note "This diagram shows core relationships between major system components"
+    note "Authentication tokens omitted for clarity but linked to LocalUser"
+    note "All timestamps and audit fields also omitted for readability"
